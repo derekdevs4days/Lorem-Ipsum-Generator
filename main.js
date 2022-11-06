@@ -1,28 +1,57 @@
 /*
 TODO
-- no repeating word
-- proper capitalization
-- more action words
+[COMPLETE]- no repeating word
+[SKIP] proper capitalization
+[SKIP] more action words
+
+[COMPLETE] - Number of words input
+
+[] - HTML & CSS
 */
+document.querySelector('button').addEventListener('click', buildLorem)
+const input = document.querySelector('input')
+const textarea = document.querySelector('textarea')
 
 const WORDBANK = ['dragon', 'orc', 'spell', 'dwarf', 'elf', 'gnome', 'human', 'magic', 'king', 'arrow', 'crossbow', 'bow', 'bolts', 'spear','forest', 'majestic', 'fireball', 'castle', 'knight', 'royalty', 'wizard']
 
 //num represent what user insert
-function buildLorem(num) {
-  let final = `${capitalize(WORDBANK[randomWord()])} `
+function buildLorem() {
+  let num = +input.value;
+
+  let initialWord = `${capitalize(randomWord())} `
+  let final = initialWord;
+  let previousWord = initialWord;
   while (num > 1) {
-    let newWord = randomLetterS() ? WORDBANK[randomWord()] : WORDBANK[randomWord()] + 's';
+    let newWord = createNewWord();
+    while (isSame(newWord, previousWord)) {
+      newWord = createNewWord();
+    }
+    previousWord = newWord;
     final += randomPeriod() ? `${newWord} ` : `. ${capitalize(newWord)} `;
     num--;
   }
   final += '. '
-  return final.replaceAll(' . ', '. ');
+  textarea.innerText = final.replaceAll(' . ', '. ');
+}
+
+function isSame(newWord, previousWord) {
+  return newWord === previousWord || newWord === previousWord + 's' || previousWord === newWord + 's';
+}
+
+function createNewWord() {
+  let newWord = '';
+  if (isPluralWord()) {
+    newWord =randomWord();
+  } else {
+    newWord = randomWord() + 's';
+  }
+  return newWord;
 }
 
 function randomWord() {
   let max = WORDBANK.length;
   let random = Math.floor(Math.random() * max);
-  return random
+  return WORDBANK[random];
 }
 
 function capitalize(word) {
@@ -34,20 +63,7 @@ function randomPeriod() {
   return chance > 1;
 }
 
-function randomLetterS() {
+function isPluralWord() {
   let chance = Math.ceil(Math.random() * 10);
   return chance > 1;
 }
-
-/*
-EXAMPLES
-Tofu oranges Italian linguine.  Puttanesca salty mushroom risotto banana bread Thai sun pepper hemp seeds ultimate farro platter cayenne strawberries Thai curry green pepper crispy iceberg lettuce. Peanut butter crunchy Bolivian rainbow pepper lychee cauliflower shiitake mushrooms chia seeds peppermint bento box Sicilian pistachio pesto creamy cauliflower alfredo sauce. Chili sesame soba noodles Chinese five-spice powder dill coconut milk Thai dragon pepper avocado ginger carrot spiced juice Malaysian hummus falafel bowl red pepper green onions coconut sugar açai eating together jalapeño seitan apricot hot lentils lemon lime minty mocha chocolate hazelnut shiitake.
-
-HOW MANY WORDS => 30
-
-build out the text with first word capitalize
-    - randomly insert periods with next word capitalize
-    - have period at the end
-
-*/
-console.log(buildLorem(50))
