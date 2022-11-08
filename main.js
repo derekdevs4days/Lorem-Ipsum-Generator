@@ -1,7 +1,7 @@
 /*
 TODO
 [COMPLETE]- no repeating word
-[SKIP] proper capitalization
+[SKIP] proper plural words
 [SKIP] more action words
 
 [COMPLETE] - Number of words input
@@ -17,6 +17,7 @@ const WORDBANK = ['dragon', 'orc', 'spell', 'dwarf', 'elf', 'gnome', 'human', 'm
 //num represent what user insert
 function buildLorem() {
   let num = +input.value;
+  if (!num) return;
 
   let initialWord = `${capitalize(randomWord())} `
   let final = initialWord;
@@ -32,6 +33,7 @@ function buildLorem() {
   }
   final += '. '
   textarea.innerText = final.replaceAll(' . ', '. ');
+  textarea.style.display='block'
 }
 
 function isSame(newWord, previousWord) {
