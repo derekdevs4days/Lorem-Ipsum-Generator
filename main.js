@@ -8,12 +8,17 @@ TODO
 
 [] - HTML & CSS
 */
-document.querySelector('button').addEventListener('click', buildLorem)
+document.querySelector('#create').addEventListener('click', buildLorem)
+document.querySelector('#copy').addEventListener('click', copyLorem)
 const input = document.querySelector('input')
 const textarea = document.querySelector('textarea')
 
-const WORDBANK = ['dragon', 'orc', 'spell', 'dwarf', 'elf', 'gnome', 'human', 'magic', 'king', 'arrow', 'crossbow', 'bow', 'bolts', 'spear','forest', 'majestic', 'fireball', 'castle', 'knight', 'royalty', 'wizard']
 
+const WORDBANK = ['dragon', 'orc', 'spell', 'dwarf', 'elf', 'gnome', 'human', 'magic', 'king', 'arrow', 'crossbow', 'bow', 'bolts', 'spear','forest', 'majestic', 'fireball', 'castle', 'knight', 'royalty', 'wizard']
+function copyLorem() {
+  let text = textarea.value;
+  navigator.clipboard.writeText(text);
+}
 //num represent what user insert
 function buildLorem() {
   let num = +input.value;
@@ -32,22 +37,19 @@ function buildLorem() {
     num--;
   }
   final += '. '
-  textarea.innerText = final.replaceAll(' . ', '. ');
-  textarea.style.display='block'
+  final = final.replaceAll(' . ', '. ').trim()
+  textarea.innerText = final;
+  textarea.style.display='block';
 }
 
+
 function isSame(newWord, previousWord) {
-  return newWord === previousWord || newWord === previousWord + 's' || previousWord === newWord + 's';
+  //return newWord === previousWord || newWord === previousWord + 's' || previousWord === newWord + 's';
+  return pluralize(newWord) === pluralize(previousWord);
 }
 
 function createNewWord() {
-  let newWord = '';
-  if (isPluralWord()) {
-    newWord =randomWord();
-  } else {
-    newWord = randomWord() + 's';
-  }
-  return newWord;
+  return isPluralWord() ? pluralize(randomWord()) : randomWord();
 }
 
 function randomWord() {
@@ -67,5 +69,6 @@ function randomPeriod() {
 
 function isPluralWord() {
   let chance = Math.ceil(Math.random() * 10);
-  return chance > 1;
+  return chance > 8;
 }
+console.log(pluralize('test', 0))
